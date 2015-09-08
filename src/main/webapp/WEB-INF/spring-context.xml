@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 
+    xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                        http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/context 
+                        http://www.springframework.org/schema/context/spring-context.xsd
+                        http://www.springframework.org/schema/mvc 
+                        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                        http://www.springframework.org/schema/tx 
+     				    http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<!-- Configuração do pacote base da aplicação -->
+	<context:component-scan base-package="br.com.springmvc" />
+	
+	<!-- Habilita as annotations do Spring MVC -->
+	<mvc:annotation-driven />
+	
+	<!-- Localiza e faz auto DI para os bean com @Transaction -->  
+	<tx:annotation-driven />
+	
+	<!-- Configura o Spring MVC para acessar conteúdo estático -->
+	<mvc:default-servlet-handler />
+	
+	<mvc:resources mapping="/resources/**" location="/resources/"  
+	cache-period="31556926"/>
+	
+	<!-- Definição da view a ser carregada no contexto raiz da aplicação -->
+	<mvc:view-controller path="/" view-name="home"/>
+	
+	<!-- Define a localização das views da aplicação -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+	
+	<!-- Configuração do datasource para conexão com o banco de dados hsql -->
+	<bean name="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="driverClassName" value="org.hsqldb.jdbcDriver"></property>
+		<property name="url" value="jdbc:hsqldb:mem:."></property>
+		<property name="username" value="SA"></property>
+		<property name="password" value=""></property>
+	</bean>
+    
+	<!-- gerenciamento de jpa pelo spring -->
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+		</property>
+	</bean>
+	
+	<!-- gerenciamento da transação pelo spring -->
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+
+</beans>
