@@ -2,8 +2,6 @@
 
 #### Sistema de ranqueamento de restaurantes baseado na preferência dos usuários.
 
-Endereço: http://votenorestaurante-foliveira.rhcloud.com/
-
 Tecnologias utilizadas:
 - Spring MVC
 - JPA com Hibernate
